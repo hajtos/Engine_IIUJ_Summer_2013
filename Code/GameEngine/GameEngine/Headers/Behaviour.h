@@ -1,0 +1,23 @@
+#include <list>
+using namespace std;
+
+#ifndef __Behaviour_h__
+#define __Behaviour_h__
+
+#include "Condition.h"
+#include "Event.h"
+
+class Condition;
+class Event;
+class Behaviour;
+
+class Behaviour
+{
+	public:
+		bool check_conditions();
+		Event* Event;
+	private:
+		std::list<Condition> conditions;
+};
+
+#endif

@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{EAF792C0-16A3-4CA7-9A75-9D34E50F9AE7}</ProjectGuid>
+    <RootNamespace>GameEngine</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>.\Headers;.\Irrlicht;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LibraryPath>.\Irrlicht\Libs;$(LibraryPath)</LibraryPath>
+    <SourcePath>.\Sources;$(SourcePath)</SourcePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Sources\Animator.cpp" />
+    <ClCompile Include="Sources\Background.cpp" />
+    <ClCompile Include="Sources\Behaviour.cpp" />
+    <ClCompile Include="Sources\Border.cpp" />
+    <ClCompile Include="Sources\Cloud.cpp" />
+    <ClCompile Include="Sources\ComplexEvent.cpp" />
+    <ClCompile Include="Sources\Condition.cpp" />
+    <ClCompile Include="Sources\Control.cpp" />
+    <ClCompile Include="Sources\Control_Set.cpp" />
+    <ClCompile Include="Sources\DestroyEvent.cpp" />
+    <ClCompile Include="Sources\Entity.cpp" />
+    <ClCompile Include="Sources\Event.cpp" />
+    <ClCompile Include="Sources\ExternalEvent.cpp" />
+    <ClCompile Include="Sources\Field.cpp" />
+    <ClCompile Include="Sources\Item.cpp" />
+    <ClCompile Include="Sources\Level.cpp" />
+    <ClCompile Include="Sources\Monster.cpp" />
+    <ClCompile Include="Sources\MoveEvent.cpp" />
+    <ClCompile Include="Sources\NewFieldEvent.cpp" />
+    <ClCompile Include="Sources\ParameterChangeEvent.cpp" />
+    <ClCompile Include="Sources\Player.cpp" />
+    <ClCompile Include="Sources\Point.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Headers\Animator.h" />
+    <ClInclude Include="Headers\Background.h" />
+    <ClInclude Include="Headers\Behaviour.h" />
+    <ClInclude Include="Headers\Border.h" />
+    <ClInclude Include="Headers\Cloud.h" />
+    <ClInclude Include="Headers\ComplexEvent.h" />
+    <ClInclude Include="Headers\Condition.h" />
+    <ClInclude Include="Headers\Control.h" />
+    <ClInclude Include="Headers\Control_Set.h" />
+    <ClInclude Include="Headers\DestroyEvent.h" />
+    <ClInclude Include="Headers\Entity.h" />
+    <ClInclude Include="Headers\Event.h" />
+    <ClInclude Include="Headers\ExternalEvent.h" />
+    <ClInclude Include="Headers\Field.h" />
+    <ClInclude Include="Headers\Item.h" />
+    <ClInclude Include="Headers\Level.h" />
+    <ClInclude Include="Headers\Monster.h" />
+    <ClInclude Include="Headers\MoveEvent.h" />
+    <ClInclude Include="Headers\NewFieldEvent.h" />
+    <ClInclude Include="Headers\ParameterChangeEvent.h" />
+    <ClInclude Include="Headers\Player.h" />
+    <ClInclude Include="Headers\Point.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="test.txt" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,14 @@
+Je¿eli program nie dzia³a upewnijcie siê, ¿e linkowania projektu s¹ dobre.
+
+- Czy przy usuniêciu klasy "Field" mamy równie¿ usuwaæ towarzysz¹ce mu "Event"y?
+	Jeœli tak, zmieñ destruktor klasy Field.
+- Ze wzglêdów przegl¹dania w liœcie, zamiast od razu wyrzucaæ dany element doda³em do poziomu listê nazwan¹ koszem, wrzucam do niej niepotrzebne fieldy które s¹ usuwane pod koniec funkcji advance_frame
+	Je¿eli chcesz od razu wyrzuciæ dany element u¿ywasz odpowiedniej funkcji "remove"
+- Zaproponowa³em sposób zczytywania naciœniêtych klawiszy (WSAD, QZ) ale ich obs³uga jest na razie tylko demonstracyjna. Silnik irrlicht mia³ wbudowane zczytanie klawiszy
+- Doda³em skybox na pocz¹tek, ale nie dzia³a on bynajmniej tak jak powinien. Jest tylko dla dema
+
+- TO DO: Dodaæ destruktor klasy "Level"
+- TO DO: Dodaæ wczytywanie klasy "Level" z pliku
+- TO DO: Dziedziczenie klasy "Event" oraz ich obs³ugê
+- TO DO: Dodaæ obs³ugê "Eventów", w tym w funkcji "trash" lub wszystkich "remove" poziomu wywo³ywanie funkcji "destroy_event"
+- TO DO: Obs³ugê podanej œcie¿ki przy ³adowaniu modelu w konstruktorze "field"
