@@ -1,20 +1,21 @@
+///Includes
 #include <irrlicht.h>
 #include <Level.h>
 #include <Background.h>
-
+///Namespaces
 using namespace irr;
-
 using namespace core;
 using namespace scene;
 using namespace video;
 using namespace io;
 using namespace gui;
-
+///Defs
 #ifdef _IRR_WINDOWS_
 #pragma comment(lib, "Irrlicht.lib")
 #pragma comment(linker, "/subsystem:windows /ENTRY:mainCRTStartup")
 #endif
 
+///Class Declarations
 class KeyReciever : public IEventReceiver
 {
 public:
@@ -38,10 +39,12 @@ private:
 	bool KeyIsDown[KEY_KEY_CODES_COUNT];
 };
 
+///Program Startup
 int main()
 {
 	KeyReciever receiver;
 
+	///Creating Game Window
 	IrrlichtDevice *device =
 		createDevice( video::EDT_OPENGL, dimension2d<u32>(800, 600), 16,
 			false, false, false, &receiver);
@@ -58,7 +61,7 @@ int main()
 	//ICameraSceneNode *cam = smgr->addCameraSceneNode(0, vector3df(0,30,0), vector3df(0,0,0));
 	ICameraSceneNode *cam = smgr->addCameraSceneNode(0, vector3df(0,15,-40), vector3df(0,0,0));
 
-	//Creating level (temporary test)
+	///Creating level (temporary test)
 	Level L = Level(device);
 	
 
@@ -77,6 +80,7 @@ int main()
 	f32 FrameInterval = 1.0/60.0;
 	u32 t2 = device->getTimer()->getTime();
 
+	///Running the Game
 	while(device->run())
 	{
 		if (device->isWindowActive())

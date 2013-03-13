@@ -1,0 +1,5 @@
+We should write down some tests and do them every new update.
+
+1) Does it compiles without errors or warnings?
+2) Does every keybiding works?
+3) Did Processor usage increased since last update?
