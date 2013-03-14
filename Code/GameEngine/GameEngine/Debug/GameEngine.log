@@ -1,21 +1,55 @@
-﻿Build started 2013-01-23 02:17:15.
-     1>Project "C:\Users\Konrad\Desktop\GameEngine\GameEngine\GameEngine.vcxproj" on node 2 (build target(s)).
+﻿Build started 2013-03-14 21:54:42.
+     1>Project "C:\Users\Konrad\Documents\GitHub\Engine_IIUJ_Summer_2013\Code\GameEngine\GameEngine\GameEngine.vcxproj" on node 2 (build target(s)).
      1>InitializeBuildStatus:
          Creating "Debug\GameEngine.unsuccessfulbuild" because "AlwaysCreate" was specified.
        ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt Sources\Background.cpp main.cpp
-         main.cpp
-     1>c:\users\konrad\desktop\gameengine\gameengine\main.cpp(66): warning C4305: 'argument' : truncation from 'double' to 'irr::f32'
-     1>c:\users\konrad\desktop\gameengine\gameengine\main.cpp(69): warning C4305: 'argument' : truncation from 'double' to 'irr::f32'
-     1>c:\users\konrad\desktop\gameengine\gameengine\main.cpp(72): warning C4305: 'argument' : truncation from 'double' to 'irr::f32'
-     1>c:\users\konrad\desktop\gameengine\gameengine\main.cpp(72): warning C4305: 'argument' : truncation from 'double' to 'irr::f32'
-     1>c:\users\konrad\desktop\gameengine\gameengine\main.cpp(77): warning C4305: 'initializing' : truncation from 'double' to 'irr::f32'
-     1>c:\users\konrad\desktop\gameengine\gameengine\main.cpp(92): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp Sources\Animator.cpp Sources\Background.cpp Sources\Behaviour.cpp Sources\Border.cpp Sources\Cloud.cpp Sources\ComplexEvent.cpp Sources\Condition.cpp Sources\Control.cpp Sources\Control_Set.cpp Sources\DestroyEvent.cpp Sources\Entity.cpp Sources\Event.cpp Sources\ExternalEvent.cpp Sources\Field.cpp Sources\Item.cpp Sources\Level.cpp Sources\Monster.cpp Sources\MoveEvent.cpp Sources\NewFieldEvent.cpp Sources\ParameterChangeEvent.cpp Sources\Player.cpp Sources\Point.cpp
+         Point.cpp
+         Player.cpp
+         ParameterChangeEvent.cpp
+         NewFieldEvent.cpp
+         MoveEvent.cpp
+         Monster.cpp
+         Level.cpp
+     1>c:\users\konrad\documents\github\engine_iiuj_summer_2013\code\gameengine\gameengine\sources\level.cpp(46): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\konrad\documents\github\engine_iiuj_summer_2013\code\gameengine\gameengine\sources\level.cpp(48): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+     1>c:\users\konrad\documents\github\engine_iiuj_summer_2013\code\gameengine\gameengine\sources\level.cpp(50): warning C4244: 'argument' : conversion from 'int' to 'float', possible loss of data
+         Item.cpp
+         Field.cpp
+     1>c:\users\konrad\documents\github\engine_iiuj_summer_2013\code\gameengine\gameengine\sources\field.cpp(44): warning C4244: 'argument' : conversion from 'int' to 'irr::f32', possible loss of data
+     1>c:\users\konrad\documents\github\engine_iiuj_summer_2013\code\gameengine\gameengine\sources\field.cpp(56): warning C4244: 'argument' : conversion from 'int' to 'irr::f32', possible loss of data
+     1>c:\users\konrad\documents\github\engine_iiuj_summer_2013\code\gameengine\gameengine\sources\field.cpp(65): warning C4244: 'argument' : conversion from 'int' to 'irr::f32', possible loss of data
+     1>c:\users\konrad\documents\github\engine_iiuj_summer_2013\code\gameengine\gameengine\sources\field.cpp(76): warning C4244: 'argument' : conversion from 'int' to 'irr::f32', possible loss of data
+     1>c:\users\konrad\documents\github\engine_iiuj_summer_2013\code\gameengine\gameengine\sources\field.cpp(109): warning C4244: 'argument' : conversion from 'int' to 'irr::f32', possible loss of data
+     1>c:\users\konrad\documents\github\engine_iiuj_summer_2013\code\gameengine\gameengine\sources\field.cpp(116): warning C4244: 'argument' : conversion from 'int' to 'irr::f32', possible loss of data
+         ExternalEvent.cpp
+         Event.cpp
+         Entity.cpp
+         DestroyEvent.cpp
+         Control_Set.cpp
+         Control.cpp
+         Condition.cpp
+         ComplexEvent.cpp
+         Cloud.cpp
+         Border.cpp
+         Behaviour.cpp
+         Generating Code...
+         Compiling...
          Background.cpp
-     1>c:\users\konrad\desktop\gameengine\gameengine\sources\background.cpp(18): warning C4102: 'irr' : unreferenced label
+     1>c:\users\konrad\documents\github\engine_iiuj_summer_2013\code\gameengine\gameengine\sources\background.cpp(18): warning C4102: 'irr' : unreferenced label
+         Animator.cpp
+     1>c:\users\konrad\documents\github\engine_iiuj_summer_2013\code\gameengine\gameengine\sources\animator.cpp(71): warning C4244: 'argument' : conversion from 'int' to 'irr::f32', possible loss of data
+     1>c:\users\konrad\documents\github\engine_iiuj_summer_2013\code\gameengine\gameengine\sources\animator.cpp(91): warning C4244: 'argument' : conversion from 'int' to 'irr::f32', possible loss of data
+         main.cpp
+     1>c:\users\konrad\documents\github\engine_iiuj_summer_2013\code\gameengine\gameengine\main.cpp(69): warning C4305: 'argument' : truncation from 'double' to 'irr::f32'
+     1>c:\users\konrad\documents\github\engine_iiuj_summer_2013\code\gameengine\gameengine\main.cpp(72): warning C4305: 'argument' : truncation from 'double' to 'irr::f32'
+     1>c:\users\konrad\documents\github\engine_iiuj_summer_2013\code\gameengine\gameengine\main.cpp(75): warning C4305: 'argument' : truncation from 'double' to 'irr::f32'
+     1>c:\users\konrad\documents\github\engine_iiuj_summer_2013\code\gameengine\gameengine\main.cpp(75): warning C4305: 'argument' : truncation from 'double' to 'irr::f32'
+     1>c:\users\konrad\documents\github\engine_iiuj_summer_2013\code\gameengine\gameengine\main.cpp(80): warning C4305: 'initializing' : truncation from 'double' to 'irr::f32'
+     1>c:\users\konrad\documents\github\engine_iiuj_summer_2013\code\gameengine\gameengine\main.cpp(96): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
          Generating Code...
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Konrad\Desktop\GameEngine\Debug\GameEngine.exe" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\GameEngine.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\Konrad\Desktop\GameEngine\Debug\GameEngine.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Konrad\Desktop\GameEngine\Debug\GameEngine.lib" /MACHINE:X86 Debug\main.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Konrad\Documents\GitHub\Engine_IIUJ_Summer_2013\Code\GameEngine\Debug\GameEngine.exe" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\GameEngine.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"C:\Users\Konrad\Documents\GitHub\Engine_IIUJ_Summer_2013\Code\GameEngine\Debug\GameEngine.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Konrad\Documents\GitHub\Engine_IIUJ_Summer_2013\Code\GameEngine\Debug\GameEngine.lib" /MACHINE:X86 Debug\main.obj
          Debug\Animator.obj
          Debug\Background.obj
          Debug\Behaviour.obj
@@ -38,15 +72,15 @@
          Debug\ParameterChangeEvent.obj
          Debug\Player.obj
          Debug\Point.obj
-         LINK : C:\Users\Konrad\Desktop\GameEngine\Debug\GameEngine.exe not found or not built by the last incremental link; performing full link
-         GameEngine.vcxproj -> C:\Users\Konrad\Desktop\GameEngine\Debug\GameEngine.exe
+         LINK : C:\Users\Konrad\Documents\GitHub\Engine_IIUJ_Summer_2013\Code\GameEngine\Debug\GameEngine.exe not found or not built by the last incremental link; performing full link
+         GameEngine.vcxproj -> C:\Users\Konrad\Documents\GitHub\Engine_IIUJ_Summer_2013\Code\GameEngine\Debug\GameEngine.exe
        Manifest:
-         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"C:\Users\Konrad\Desktop\GameEngine\Debug\GameEngine.exe;#1" /manifest Debug\GameEngine.exe.intermediate.manifest
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"C:\Users\Konrad\Documents\GitHub\Engine_IIUJ_Summer_2013\Code\GameEngine\Debug\GameEngine.exe;#1" /manifest Debug\GameEngine.exe.intermediate.manifest
        FinalizeBuildStatus:
          Deleting file "Debug\GameEngine.unsuccessfulbuild".
          Touching "Debug\GameEngine.lastbuildstate".
-     1>Done Building Project "C:\Users\Konrad\Desktop\GameEngine\GameEngine\GameEngine.vcxproj" (build target(s)).
+     1>Done Building Project "C:\Users\Konrad\Documents\GitHub\Engine_IIUJ_Summer_2013\Code\GameEngine\GameEngine\GameEngine.vcxproj" (build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:04.07
+Time Elapsed 00:00:45.47
