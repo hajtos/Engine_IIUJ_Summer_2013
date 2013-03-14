@@ -10,7 +10,7 @@ using namespace std;
 class Condition;
 class Event;
 class Behaviour;
-
+///Declarations for class Behaviour
 class Behaviour
 {
 	public:
