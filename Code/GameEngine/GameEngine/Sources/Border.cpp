@@ -17,8 +17,7 @@ Border::Border(Point position, Point size, Level* L) {
 	custom_attribute3 = 0;
 	gravity_degree = 100;
 	facing_angle = 90;
-	main_field = new Field(this, position, 4, "", L);
-	//main_field->rescale(size);
+	main_field = new Field(this, position, size, 4, "", L);
 }
 
 unsigned int Border::get_type() {

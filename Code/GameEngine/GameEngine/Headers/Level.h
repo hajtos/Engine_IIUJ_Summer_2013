@@ -58,8 +58,8 @@ class Level
 
 		void add_event(std::string init);
 		void add_border(Point start, Point size);
-		void add_monster(std::string init, Point position = Point());
-		void add_item(std::string init, Point position = Point());
+		void add_monster(std::string init, Point position = Point(), Point size = Point(5.0, 10.0, 1.0));
+		void add_item(std::string init, Point position = Point(), Point size = Point(5.0, 5.0, 1.0));
 		void advance_frame(ICameraSceneNode *cam);
 		bool collision_detect(Field* source);
 		void move_field(Field* field);

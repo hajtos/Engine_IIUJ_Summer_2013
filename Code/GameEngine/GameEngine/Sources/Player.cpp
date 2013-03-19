@@ -8,10 +8,10 @@ Player::~Player() {
 }
 
 Player::Player() {
-	animator = 0;
 	movement_speed = 5;
 	hp = 100;
 	lifes = 3;
+	grounded = false;
 
 	//Entity:
 	custom_attribute1 = 0;
@@ -27,6 +27,7 @@ Player::Player(Level* L) {
 	movement_speed = 5;
 	hp = 100;
 	lifes = 3;
+	grounded = false;
 
 	//Entity:
 	custom_attribute1 = 0;
@@ -34,7 +35,7 @@ Player::Player(Level* L) {
 	custom_attribute3 = 0;
 	gravity_degree = 100; //%?
 	facing_angle = 90;
-	main_field = new Field(this, Point(), 1, "", L);
+	main_field = new Field(this, Point(), Point(5.0, 10.0, 1.0), 1, "", L);
 	animator = new Animator("", main_field->graphic_model_animated);
 }
 

@@ -11,7 +11,7 @@ Monster::~Monster() {
 	main_field = 0;
 }
 
-Monster::Monster(std::string init, Level* L, Point position) {
+Monster::Monster(std::string init, Level* L, Point position, Point size) {
 	movement_speed = 10;
 	hp = 100;
 	std::list<Behaviour> temp_B;
@@ -24,7 +24,7 @@ Monster::Monster(std::string init, Level* L, Point position) {
 	custom_attribute3 = 0;
 	gravity_degree = 100;
 	facing_angle = 90;
-	main_field = new Field(this, position, 2, "", L);
+	main_field = new Field(this, position, size, 2, "", L);
 }
 
 unsigned int Monster::get_type() {

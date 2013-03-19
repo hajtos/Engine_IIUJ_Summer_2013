@@ -19,6 +19,7 @@ class Player : public Entity
 		Animator* animator;
 		int hp;
 		int lifes;
+		bool grounded;
 		
 		~Player();
 		Player();

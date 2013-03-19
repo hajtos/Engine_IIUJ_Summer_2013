@@ -1,7 +1,7 @@
 using namespace std;
 
 #include "Animator.h"
-///Code for class Animator functions
+
 Animator::Animator(std::string Path, scene::IAnimatedMeshSceneNode* Model)
 {
 	graphic_model = Model;
@@ -14,7 +14,7 @@ void Animator::check()
 {
 	if (!active)
 		return;
-	if (graphic_model->getFrameNr() == maxFrame)
+	if (graphic_model->getFrameNr() > graphic_model->getEndFrame() - 1)
 	{
 		if (looping)
 			setAnimation(animID);

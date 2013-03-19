@@ -15,7 +15,7 @@ class Item : public Entity
 {
 	public:
 		~Item();
-		Item(std::string init, Level* L, Point position = Point());
+		Item(std::string init, Level* L, Point position = Point(), Point Size = Point(5.0, 5.0, 1.0));
 
 		unsigned int get_type();
 		void remove();
