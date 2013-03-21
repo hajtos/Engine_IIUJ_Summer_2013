@@ -9,7 +9,7 @@
 #include "Monster.h"
 #include "Item.h"
 #include "Border.h"
-#include "Cloud.h"
+#include "BgMovableObject.h"
 #include <exception>
 #include <irrlicht.h>
 #include <string>
@@ -32,13 +32,12 @@ class Background
 	irr::f32 speedHorizontal;
 	irr::f32 speedInwards;
 	Player* player;
-	Cloud* argh;
 	
 
 
 public:
 	Background(void);
-	Background(int t,vector3df Size, vector3df Position, bool Transparency, char* TexturePath, irr::f32 SpeedHorizontal, irr::f32 SpeedInwards, IrrlichtDevice* Device, Level Lvl);
+	Background(vector3df Size, vector3df Position, bool Transparency, char* TexturePath, irr::f32 SpeedHorizontal, irr::f32 SpeedInwards, IrrlichtDevice* Device, Level Lvl);
 	~Background(void);
 
 	ISceneNode* generateSingleCube(vector3df Size, vector3df Position, bool Transparency, char* TexturePath, irr::f32 SpeedHorizontal, irr::f32 SpeedInwards, IrrlichtDevice* Device, Level Lvl);
@@ -55,6 +54,5 @@ public:
 	void moveRight();
 	void moveInwards();  // ruch wglab ekranu (w kierunku tla)
 	void moveOutwards();  // ruch w przeciwnym kierunku co Inwards ;)
-	void cloud_move();
 };
 #endif

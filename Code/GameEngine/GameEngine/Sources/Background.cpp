@@ -1,5 +1,5 @@
 #include "Background.h"
-#include <Cloud.h>
+#include <BgMovableObject.h>
 #include <exception>
 #include <string>
 #include <list>
@@ -9,7 +9,7 @@ Background::Background(void)
 {
 }
 
-Background::Background(int t,vector3df Size, vector3df Position, bool Transparency, char* TexturePath, irr::f32 SpeedHorizontal, irr::f32 SpeedInwards, IrrlichtDevice* Device, Level Lvl)
+Background::Background(vector3df Size, vector3df Position, bool Transparency, char* TexturePath, irr::f32 SpeedHorizontal, irr::f32 SpeedInwards, IrrlichtDevice* Device, Level Lvl)
 {
 	speedHorizontal = SpeedHorizontal;
 	speedInwards = SpeedInwards;
@@ -17,14 +17,11 @@ Background::Background(int t,vector3df Size, vector3df Position, bool Transparen
 
 	irr:f32 initialHorizontalPosition = Position.X;
 
-	if(t==1){
 	for(int i=0; i<10; i++)
 	{
 		cubes[i] = generateSingleCube(Size, vector3df(initialHorizontalPosition+Size.X*10*i,Position.Y,Position.Z), Transparency, TexturePath, speedHorizontal, speedInwards, Device, Lvl);
 	}
-	}else{
-		argh = new Cloud(Device,Point(Position.X,Position.Y,Position.Z));
-	}
+
 }
 
 Background::~Background(void)
@@ -105,9 +102,4 @@ void Background::moveOutwards()
 	{
 		cubes[i]->setPosition(cubes[i]->getPosition()+vector3df(0,(-1)*speedInwards,0)*(player->movement_speed/10));
 	}
-}
-
-void Background::cloud_move()
-{
-	argh->cloud_move();
 }

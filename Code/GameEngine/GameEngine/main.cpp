@@ -66,16 +66,14 @@ int main()
 	
 
 	Background tlo_niebo;
-	tlo_niebo = Background(1,vector3df(500,350,0), vector3df(1,1,1000), false, "../media/environment/sky16.JPG", 0.1, 1.0, device, L);
+	tlo_niebo = Background(vector3df(500,350,0), vector3df(1,1,1000), false, "../media/environment/sky16.JPG", 0.1, 1.0, device, L);
 
 	Background tlo_drzewa;
-	tlo_drzewa = Background(1,vector3df(20,10,0), vector3df(-300,1,300), true, "../media/environment/trees.png", 0.5, 3.1, device, L);
+	tlo_drzewa = Background(vector3df(20,10,0), vector3df(-300,1,300), true, "../media/environment/trees.png", 0.5, 3.1, device, L);
 
 	Background tlo_plaza;
-	tlo_plaza = Background(1,vector3df(800,200,0), vector3df(1,-1000,600), false, "../media/environment/beach.jpg", 5.1, 10.1, device, L);
+	tlo_plaza = Background(vector3df(800,200,0), vector3df(1,-1000,600), false, "../media/environment/beach.jpg", 5.1, 10.1, device, L);
 
-	Background tlo_chmury;
-	tlo_chmury = Background(2,vector3df(4,1,0), vector3df(350,50,400), true, "../media/environment/cloud.png", 0.0, 0.0, device, L);
 
 	f32 FrameInterval = 1.0/60.0;
 	u32 t2 = device->getTimer()->getTime();
@@ -89,7 +87,6 @@ int main()
 			f32 frameDeltaTime = (f32)(t1 - t2) / 1000.f; // Time in seconds
 			if (frameDeltaTime >= FrameInterval)
 			{
-				tlo_chmury.cloud_move();
 				//Updating Time
 				t2 = t1;
 				driver->beginScene(true, true, SColor(255,100,101,140));

@@ -71,7 +71,7 @@
     <ClCompile Include="Sources\Background.cpp" />
     <ClCompile Include="Sources\Behaviour.cpp" />
     <ClCompile Include="Sources\Border.cpp" />
-    <ClCompile Include="Sources\Cloud.cpp" />
+    <ClCompile Include="Sources\BgMovableObject.cpp" />
     <ClCompile Include="Sources\ComplexEvent.cpp" />
     <ClCompile Include="Sources\Condition.cpp" />
     <ClCompile Include="Sources\Control.cpp" />
@@ -95,7 +95,7 @@
     <ClInclude Include="Headers\Background.h" />
     <ClInclude Include="Headers\Behaviour.h" />
     <ClInclude Include="Headers\Border.h" />
-    <ClInclude Include="Headers\Cloud.h" />
+    <ClInclude Include="Headers\BgMovableObject.h" />
     <ClInclude Include="Headers\ComplexEvent.h" />
     <ClInclude Include="Headers\Condition.h" />
     <ClInclude Include="Headers\Control.h" />
