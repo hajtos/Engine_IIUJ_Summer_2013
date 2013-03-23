@@ -15,8 +15,9 @@ Field::~Field() {
 	graphic_model_animated = 0;
 }
 
-//			 wlasciciel,pozycja,wielkoœæ, typ           , droga do pliku  , poziom  , czas zycia
-Field::Field(Entity* O, Point P, Point S, int model_type, std::string Path, Level* L, int lifetime) {
+Field::Field(Entity* O, Point P, Point S, int model_type, char* Path, //owner, position, size, type, file path
+		Level* L, int lifetime, Point trans, bool anim, //level, lifetime, translation, animated?
+		bool a, bool aa) { //active, always active
 	owner = O;
 	type = O->get_type();
 	movement_type = 'u'; //unknown, I assume it's based on type?
@@ -30,80 +31,63 @@ Field::Field(Entity* O, Point P, Point S, int model_type, std::string Path, Leve
 	destroy_event = 0;
 	destroy_at_stop = false;
 	location = L;
-	switch (model_type) {
-	case 1: //player
-		fixed = false;
+	translation = trans;
+	active = a;
+	always_active = aa;
+	if (anim)
+	{
 		graphic_model = 0;
+		
+		graphic_model_animated = L->smgr->addAnimatedMeshSceneNode(L->smgr->getMesh(Path));
+		graphic_model_animated->setMaterialFlag(video::EMF_LIGHTING, false);
+		graphic_model_animated->setFrameLoop(205, 249);
+		graphic_model_animated->setAnimationSpeed(15);
 
-		graphic_model_animated = L->smgr->addAnimatedMeshSceneNode(L->smgr->getMesh("../media/player/ninja.b3d"));
-		graphic_model_animated->setMaterialFlag(video::EMF_LIGHTING, false);
-		graphic_model_animated->setFrameLoop(205, 249);
-		graphic_model_animated->setAnimationSpeed(15);
-		
-		translation = Point(0.0, -5.0, 0.0);
 		graphic_model_animated->setPosition(core::vector3df(position.position_x + translation.position_x,
-			position.position_y + translation.position_y, position.layer + translation.layer));
+		position.position_y + translation.position_y, position.layer + translation.layer));
 		graphic_model_animated->setScale(core::vector3df(1.0, 1.0, 1.0));
 		graphic_model_animated->setRotation(core::vector3df(0,O->facing_angle,0));
-		break;
-	case 2: //monster 1
-		fixed = false;
-		graphic_model = 0;
-		
-		graphic_model_animated = L->smgr->addAnimatedMeshSceneNode(L->smgr->getMesh("../media/monster/ninja.b3d"));
-		graphic_model_animated->setMaterialFlag(video::EMF_LIGHTING, false);
-		graphic_model_animated->setFrameLoop(205, 249);
-		graphic_model_animated->setAnimationSpeed(15);
-		
-		translation = Point(0.0, -5.0, 0.0);
-		graphic_model_animated->setPosition(core::vector3df(position.position_x + translation.position_x,
-			position.position_y + translation.position_y, position.layer + translation.layer));
-		graphic_model_animated->setScale(core::vector3df(1.0, 1.0, 1.0));
-		graphic_model_animated->setRotation(core::vector3df(0,O->facing_angle,0));
-		break;
-	case 3: //item
-		fixed = true;
-		graphic_model = L->smgr->addSphereSceneNode();
-		graphic_model->setMaterialTexture(0, L->driver->getTexture("../media/environment/wall.bmp"));
+	}
+	else
+	{
+		if (model_type == 4)
+			graphic_model = L->smgr->addCubeSceneNode();
+		else
+			graphic_model = L->smgr->addSphereSceneNode();
+		graphic_model->setMaterialTexture(0, L->driver->getTexture(Path));
 		graphic_model->setMaterialFlag(video::EMF_LIGHTING, false);
-		
-		translation = Point(0.0, 0.0, 0.0);
+	
 		graphic_model->setPosition(core::vector3df(position.position_x + translation.position_x,
 			position.position_y + translation.position_y, position.layer + translation.layer));
 		graphic_model->setScale(core::vector3df(1.0, 1.0, 1.0));
 		graphic_model->setRotation(core::vector3df(0,O->facing_angle,0));
 
 		graphic_model_animated = 0;
-		break;
-	case 4: //border
-		fixed = true;
-		graphic_model = L->smgr->addCubeSceneNode();
-		graphic_model->setMaterialTexture(0, L->driver->getTexture("../media/environment/wall.jpg"));
-		graphic_model->setMaterialFlag(video::EMF_LIGHTING, false);
-		
-		translation = Point(0.0, 0.0, 0.0);
-		graphic_model->setPosition(core::vector3df(position.position_x + translation.position_x,
-			position.position_y + translation.position_y, position.layer + translation.layer));
-		graphic_model->setScale(core::vector3df(1.0, 1.0, 1.0));
-		//graphic_model->setScale(core::vector3df(size.position_x, size.position_y, size.layer));
-		graphic_model->setRotation(core::vector3df(0,O->facing_angle,0));
-		
-		graphic_model_animated = 0;
-		break;
-	default:
-		graphic_model = 0;
-		
-		graphic_model_animated = 0;
-		break;
 	}
 }
 
 void Field::rescale(Point to_size) {
-	size = to_size;
+	//Function specifically for rescaling graphic model, does not affect object size
+	if (graphic_model != 0)
+		graphic_model->setScale(core::vector3df(to_size.position_x, to_size.position_y, to_size.layer));
+	if (graphic_model_animated != 0)
+		graphic_model_animated->setScale(core::vector3df(to_size.position_x, to_size.position_y, to_size.layer));
 }
 
 
 void Field::update() {
+	//Updating active status
+	if (!always_active)
+	{
+		double difx = abs(position.position_x - location->player->main_field->position.position_x);
+		double dify = abs(position.position_y - location->player->main_field->position.position_y);
+		if ((difx <= location->active_range.position_x) && (dify <= location->active_range.position_y))
+			active = true;
+		else active = false;
+	}
+	if (!always_active && !active)
+		return;
+
 	//Updating unit position based on velocity, detecting collision
 	location->move_field(this);
 	/*
@@ -114,8 +98,12 @@ void Field::update() {
 		velocity.position_y = 0;
 	}
 	*/
+
+	//Updating animation
+	if (this->owner->animator != 0)
+		this->owner->animator->check();
 	
-	//Updating Model position/scale/rotation
+	//Updating Model position/rotation
 	if (graphic_model != 0) {
 		graphic_model->setPosition(core::vector3df(position.position_x + translation.position_x,
 			position.position_y + translation.position_y, (position.layer - 1 + translation.layer)*10));
@@ -130,8 +118,8 @@ void Field::update() {
 	}
 
 	//Handling gravity
-	if (this->owner && !(this->fixed))
-		velocity.position_y -= location->gravity*location->delta_time;
+	if (this->owner)
+		velocity.position_y -= location->gravity*location->delta_time*this->owner->gravity_degree/100;
 
 	//Handling life time
 	if (time_left == 0)

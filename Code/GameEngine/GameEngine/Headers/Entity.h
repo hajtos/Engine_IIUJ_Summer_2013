@@ -1,6 +1,7 @@
 #ifndef __Entity_h__
 #define __Entity_h__
 
+#include "Animator.h"
 #include <exception>
 
 using namespace std;
@@ -10,6 +11,7 @@ class Field;
 class Entity
 {
 	public:
+		Animator* animator;
 		float movement_speed;
 		Field* main_field;
 		int custom_attribute1;

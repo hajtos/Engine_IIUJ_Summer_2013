@@ -1,6 +1,7 @@
 #ifndef __Level_h__
 #define __Level_h__
 
+#include "AnimationTable.h"
 #include "Entity.h"
 #include "Point.h"
 #include "Condition.h"
@@ -11,10 +12,13 @@
 #include "Border.h"
 #include <exception>
 #include <irrlicht.h>
+#include <iostream>
+#include <fstream>
 #include <string>
 #include <list>
 #include <vector>
 #include <map>
+
 
 using namespace irr;
 
@@ -23,6 +27,8 @@ using namespace scene;
 using namespace video;
 using namespace io;
 using namespace gui;
+
+using namespace std;
 
 class Player;
 class Point;
@@ -37,7 +43,7 @@ class Level
 {
 	public:
 		Level(IrrlichtDevice* Device);
-		//Level(IrrlichtDevice* Device, std::string path);
+		Level(IrrlichtDevice* Device, char* path);
 
 		//irrlicht data
 		IrrlichtDevice *device;
@@ -45,14 +51,17 @@ class Level
 		ISceneManager* smgr;
 		IGUIEnvironment* guienv;
 
+		Point start; //Top left corner
 		Point size;
 		Point respawn;
+		Point active_range;
 		Player* player;
 		int custom_attribute1;
 		int custom_attribute2;
 		int custom_attribute3;
+		std::map< std::string, AnimationTable* > animation_tables;
 		std::map< std::string, Event* > event_dictionary;
-		int gravity;
+		double gravity;
 		int lc_interval;
 		float delta_time;
 
@@ -74,10 +83,11 @@ class Level
 		std::list<Field*> fields;
 		std::list<Field*> garbage;
 		std::list<Item*> items;
-		Point active_range;
 		int time_left;
 		std::list<Monster*> monsters;
 		std::list<Border*> boundaries;
+		inline std::string getNextRelevantLine(ifstream& infile);
+		void extractValues(std::string source, double* output);
 };
 
 #endif

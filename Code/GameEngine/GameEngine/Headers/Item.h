@@ -15,7 +15,9 @@ class Item : public Entity
 {
 	public:
 		~Item();
-		Item(std::string init, Level* L, Point position = Point(), Point Size = Point(5.0, 5.0, 1.0));
+		Item(Level* L, double ms, Point pos, Point size,
+			int ca1, int ca2, int ca3, int gd, int fa, char* animT,
+			char* modelP, Point trans, bool anim, int lt, bool a, bool aa);
 
 		unsigned int get_type();
 		void remove();

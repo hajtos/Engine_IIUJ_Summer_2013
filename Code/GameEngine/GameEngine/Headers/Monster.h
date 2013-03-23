@@ -24,7 +24,9 @@ class Monster : public Entity
 		std::string name;
 
 		~Monster();
-		Monster(std::string init, Level* L, Point position = Point(), Point size = Point(10.0, 5.0, 1.0));
+		Monster(Level* L, int ms, int mhp, std::string nm, std::string mt,
+			Point pos, Point size, int ca1, int ca2, int ca3, int gd, int fa,
+			char* animT, char* modelP, Point trans, bool anim, int lt, bool a, bool aa);
 		unsigned int get_type();
 		void act();
 		void remove();

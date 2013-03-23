@@ -4,8 +4,6 @@
 #include <list>
 #include <map>
 
-using namespace std;
-
 Level::Level(IrrlichtDevice* Device) {
 	//Creates a simple, testing Level, more specified constructors to be implemented.
 	device = Device;
@@ -13,16 +11,18 @@ Level::Level(IrrlichtDevice* Device) {
 	driver = device->getVideoDriver();
 	smgr = device->getSceneManager();
 	guienv = device->getGUIEnvironment();
-
-	size = Point(1200, 900, 2); //of the whole level? From which point?
+	
+	start = Point(-100, 200, 0);
+	size = Point(1200, 900, 5);
 	respawn = Point();
-	player = new Player(this);
+	player = new Player(this, 5, 100, 3, Point(0, 20, 0), Point(5, 10, 1),
+		0, 0, 0, 100, 90, "ninja", "../media/player/ninja.b3d", Point(0, -5, 0), 0);
 	custom_attribute1 = 0;
 	custom_attribute2 = 0;
 	custom_attribute3 = 0;
 	std::map< std::string, Event* > Temp_ed;
 	event_dictionary = Temp_ed;
-	gravity = 10; //double, 9.81?
+	gravity = 9.81;
 	lc_interval = 0;
 	delta_time = 0;
 	
@@ -49,32 +49,300 @@ Level::Level(IrrlichtDevice* Device) {
 	for (int i = 1; i < 5; i++)
 		add_border(Point(30 + 10*i, -10, 4), Point(10.0, 10.0, 1.0));
 }
-/*
-Level::Level(std::string path) {
-	//Loads a level from a file. To be implemented
-	throw "Not yet implemented";
+
+Level::Level(IrrlichtDevice* Device, char* path) {
+	//Loads a level from a file
+	device = Device;
+
+	driver = device->getVideoDriver();
+	smgr = device->getSceneManager();
+	guienv = device->getGUIEnvironment();
+
+	//Creating temporary variables
+	std::string TempLine = "";
+	char animT[15];
+	char modelP[30];
+	std::string LINE;
+	double lineOutput[25];
+
+	//Loading first batch of data
+	ifstream infile;
+	infile.open(path);
+	
+	//Starting point
+	LINE = getNextRelevantLine(infile);
+	extractValues(LINE, lineOutput);
+	start = Point(lineOutput[0], lineOutput[1], lineOutput[2]);
+	
+	//Level Size
+	LINE = getNextRelevantLine(infile);
+	extractValues(LINE, lineOutput);
+	size = Point(lineOutput[0], lineOutput[1], lineOutput[2]);
+	
+	//Respawn/starting point
+	LINE = getNextRelevantLine(infile);
+	extractValues(LINE, lineOutput);
+	respawn = Point(lineOutput[0], lineOutput[1], lineOutput[2]);
+	
+	//Custom attributes
+	LINE = getNextRelevantLine(infile);
+	extractValues(LINE, lineOutput);
+	custom_attribute1 = lineOutput[0];
+	custom_attribute2 = lineOutput[1];
+	custom_attribute3 = lineOutput[2];
+
+	//Gravity
+	LINE = getNextRelevantLine(infile);
+	extractValues(LINE, lineOutput);
+	gravity = lineOutput[0];
+	
+	//Active range
+	LINE = getNextRelevantLine(infile);
+	extractValues(LINE, lineOutput);
+	active_range = Point(lineOutput[0], lineOutput[1], lineOutput[2]);
+	
+	//Time left of the level
+	LINE = getNextRelevantLine(infile);
+	extractValues(LINE, lineOutput);
+	time_left = lineOutput[0];
+	
+	//Initializing generic stuff
+	lc_interval = 0;
+	delta_time = 0;
+	std::list<Field*> Temp_f;
+	fields = Temp_f;
+	
+	//Loading second batch of data
+	//Initializing events
+	LINE = getNextRelevantLine(infile);
+	std::map< std::string, Event* > Temp_ed;
+	event_dictionary = Temp_ed;
+	extractValues(LINE, lineOutput);
+	for (int i = lineOutput[0]; 0 < i; i--)
+	{
+		LINE = getNextRelevantLine(infile);
+		//=================
+		// TO DO: Events
+		//=================
+	}
+
+	//Initializing animation tables
+	LINE = getNextRelevantLine(infile);
+	std::map< std::string, AnimationTable* > Temp_at;
+	animation_tables = Temp_at;
+	extractValues(LINE, lineOutput);
+	for (int i = lineOutput[0]; 0 < i; i--)
+	{
+		LINE = getNextRelevantLine(infile);
+
+		//Creating the table
+		std::string name = LINE;
+		animation_tables.insert(std::pair< std::string, AnimationTable* >(name, new AnimationTable()));
+		
+		//Filling the table
+		for (int j = 0; j < 12; j++)
+		{
+			LINE = getNextRelevantLine(infile);
+			
+			extractValues(LINE, lineOutput);
+			int total = lineOutput[0];
+			animation_tables.find(name)->second->push(j, total, -1);
+			getline(infile, LINE);
+			extractValues(LINE, lineOutput);
+			for (int k = 0; k < total*2; k++)
+				animation_tables.find(name)->second->push(j, k, lineOutput[k]);
+		}
+	}
+	
+	//Initializing player
+	LINE = getNextRelevantLine(infile);
+	TempLine = LINE;
+	//Transforming std::strings to char arrays (animation table name)
+	LINE = getNextRelevantLine(infile);
+	for (int i = 0; i < 15; i++)
+		animT[i] = 0;
+	for (int i = 0; i < LINE.length(); i++)
+		animT[i] = LINE[i];
+	//Transforming std::strings to char arrays (model path)
+	LINE = getNextRelevantLine(infile);
+	for (int i = 0; i < 30; i++)
+		modelP[i] = 0;
+	for(int i = 0; i < LINE.length(); i++)
+		modelP[i] = LINE[i];
+	//Creating player
+	extractValues(TempLine, lineOutput);
+	player = new Player(this, lineOutput[0], lineOutput[1], lineOutput[2], //movement speed, hit points, lives
+		Point(lineOutput[3], lineOutput[4], lineOutput[5]), //starting point
+		Point(lineOutput[6], lineOutput[7], lineOutput[8]), //size
+		lineOutput[9], lineOutput[10], lineOutput[11], //custom values
+		lineOutput[12], lineOutput[13], animT, modelP, //gravity degree, fancing angle
+		Point(lineOutput[14], lineOutput[15], lineOutput[16]), lineOutput[17]); //translation, animated?
+
+	fields.insert(fields.end(), player->main_field);
+	//Loading animator state
+	LINE = getNextRelevantLine(infile);
+	extractValues(LINE, lineOutput);
+	if (lineOutput[0]) //if set is needed, else go with default
+		player->animator->set(lineOutput[1], lineOutput[2], //bool active, bool looping
+			lineOutput[3], lineOutput[4], //animation id, animation speed
+			lineOutput[5], lineOutput[6], lineOutput[7]); //current frame, min frame, max frame
+
+	//Initializing items
+	LINE = getNextRelevantLine(infile);
+	std::list<Item*> Temp_i;
+	items = Temp_i;
+	extractValues(LINE, lineOutput);
+	for (int i = lineOutput[0]; 0 < i; i--)
+	{
+		LINE = getNextRelevantLine(infile);
+		TempLine = LINE;
+		//Transforming std::strings to char arrays (animation table name)
+		LINE = getNextRelevantLine(infile);
+		for (int i = 0; i < 15; i++)
+			animT[i] = 0;
+		for (int i = 0; i < LINE.length(); i++)
+			animT[i] = LINE[i];
+		//Transforming std::strings to char arrays (model path)
+		LINE = getNextRelevantLine(infile);
+		for (int i = 0; i < 30; i++)
+			modelP[i] = 0;
+		for(int i = 0; i < LINE.length(); i++)
+			modelP[i] = LINE[i];
+		
+		//Creating item
+		extractValues(TempLine, lineOutput);
+		Item* p = new Item(this, lineOutput[0], //movement speed
+			Point(lineOutput[1], lineOutput[2], lineOutput[3]), //position
+			Point(lineOutput[4], lineOutput[5], lineOutput[6]), //size
+			lineOutput[7], lineOutput[8], lineOutput[9], lineOutput[10], //custom attributes, gravity degree
+			lineOutput[11], animT, modelP, //facing angle, animation table, model path
+			Point(lineOutput[12], lineOutput[13], lineOutput[14]), //translation
+			lineOutput[15], lineOutput[16], lineOutput[17], lineOutput[18]); //animated?, life time, active, always active
+		fields.insert(fields.end(), p->main_field);
+		items.insert(items.end(), p);
+
+		//Loading animator state
+		LINE = getNextRelevantLine(infile);
+		extractValues(LINE, lineOutput);
+		if (lineOutput[0]) //if set is needed, else go with default
+			p->animator->set(lineOutput[1], lineOutput[2], //bool active, bool looping
+				lineOutput[3], lineOutput[4], //animation id, animation speed
+				lineOutput[5], lineOutput[6], lineOutput[7]); //current frame, min frame, max frame
+	}
+	
+	//Initializing monsters
+	LINE = getNextRelevantLine(infile);
+	std::list<Monster*> Temp_m;
+	monsters = Temp_m;
+	extractValues(LINE, lineOutput);
+	for (int i = lineOutput[0]; 0 < i; i--)
+	{
+		std::string lineName;
+		std::string lineMonsterType;
+		LINE = getNextRelevantLine(infile);
+		TempLine = LINE;
+		//Transforming std::strings to char arrays (animation table name)
+		LINE = getNextRelevantLine(infile);
+		for (int i = 0; i < 15; i++)
+			animT[i] = 0;
+		for (int i = 0; i < LINE.length(); i++)
+			animT[i] = LINE[i];
+		//Transforming std::strings to char arrays (model path)
+		LINE = getNextRelevantLine(infile);
+		for (int i = 0; i < 30; i++)
+			modelP[i] = 0;
+		for(int i = 0; i < LINE.length(); i++)
+			modelP[i] = LINE[i];
+		//Getting monster name and type
+		lineName = getNextRelevantLine(infile);
+		lineMonsterType = getNextRelevantLine(infile);
+
+		extractValues(TempLine, lineOutput);
+		Monster* m = new Monster(this, lineOutput[0], lineOutput[1], //movement speed, hit points
+			lineName, lineMonsterType, //name, monster type,
+			Point(lineOutput[2], lineOutput[3], lineOutput[4]), //position
+			Point(lineOutput[5], lineOutput[6], lineOutput[7]), //size
+			lineOutput[8], lineOutput[9], lineOutput[10], lineOutput[11], //custom attributes, gravity degree
+			lineOutput[12], animT, modelP, //facing angle, animation table, model path
+			Point(lineOutput[13], lineOutput[14], lineOutput[15]), //translation
+			lineOutput[16], lineOutput[17], lineOutput[18], lineOutput[19]); //animated?, life time, active, always active
+		fields.insert(fields.end(), m->main_field);
+		monsters.insert(monsters.end(), m);
+		
+		//Loading animator state
+		LINE = getNextRelevantLine(infile);
+		extractValues(LINE, lineOutput);
+		if (lineOutput[0]) //if set is needed, else go with default
+			m->animator->set(lineOutput[1], lineOutput[2], //bool active, bool looping
+				lineOutput[3], lineOutput[4], //animation id, animation speed
+				lineOutput[5], lineOutput[6], lineOutput[7]); //current frame, min frame, max frame
+	}
+	
+	//Initializing Borders
+	LINE = getNextRelevantLine(infile);
+	std::list<Border*> Temp_b;
+	boundaries = Temp_b;
+	extractValues(LINE, lineOutput);
+	for (int i = lineOutput[0]; 0 < i; i--)
+	{
+		LINE = getNextRelevantLine(infile);
+		TempLine = LINE;
+		//Transforming std::strings to char arrays (animation table name)
+		LINE = getNextRelevantLine(infile);
+		for (int i = 0; i < 15; i++)
+			animT[i] = 0;
+		for (int i = 0; i < LINE.length(); i++)
+			animT[i] = LINE[i];
+		//Transforming std::strings to char arrays (model path)
+		LINE = getNextRelevantLine(infile);
+		for (int i = 0; i < 30; i++)
+			modelP[i] = 0;
+		for(int i = 0; i < LINE.length(); i++)
+			modelP[i] = LINE[i];
+		
+		//Creating border
+		extractValues(TempLine, lineOutput);
+		Border* b = new Border(this, lineOutput[0], lineOutput[1], lineOutput[2], //movement speed, absolute, bouncing
+			Point(lineOutput[3], lineOutput[4], lineOutput[5]), //position
+			Point(lineOutput[6], lineOutput[7], lineOutput[8]), //size
+			lineOutput[9], lineOutput[10], lineOutput[11], lineOutput[12], //custom attributes, gravity degree
+			lineOutput[13], lineOutput[14], animT, modelP, //facing angle, model type, animation table, model path
+			Point(lineOutput[15], lineOutput[16], lineOutput[17]), //translation
+			lineOutput[18], lineOutput[19], lineOutput[20], lineOutput[21]); //animated?, life time, active, always active
+		fields.insert(fields.end(), b->main_field);
+		boundaries.insert(boundaries.end(), b);
+
+		//Loading animator state
+		LINE = getNextRelevantLine(infile);
+		extractValues(LINE, lineOutput);
+		if (lineOutput[0]) //if set is needed, else go with default
+			b->animator->set(lineOutput[1], lineOutput[2], //bool active, bool looping
+				lineOutput[3], lineOutput[4], //animation id, animation speed
+				lineOutput[5], lineOutput[6], lineOutput[7]); //current frame, min frame, max frame
+	}
+	infile.close();
 }
-*/
+
 void Level::add_event(std::string init) {
 	throw "Not yet implemented";
 }
 
 void Level::add_border(Point start, Point size) {
-	Border* b = new Border(start, size, this);
-	fields.insert(fields.end(), b->main_field);
-	boundaries.insert(boundaries.end(), b);
+	//Border* b = new Border(start, size, this);
+	//fields.insert(fields.end(), b->main_field);
+	//boundaries.insert(boundaries.end(), b);
 }
 
 void Level::add_monster(std::string init, Point position, Point size) {
-	Monster* m = new Monster(init, this, position, size);
-	fields.insert(fields.end(), m->main_field);
-	monsters.insert(monsters.end(), m);
+	//Monster* m = new Monster(init, this, position, size);
+	//fields.insert(fields.end(), m->main_field);
+	//monsters.insert(monsters.end(), m);
 }
 
 void Level::add_item(std::string init, Point position, Point size) {
-	Item* i = new Item(init, this, position, size);
-	fields.insert(fields.end(), i->main_field);
-	items.insert(items.end(), i);
+	//Item* i = new Item(init, this, position, size);
+	//fields.insert(fields.end(), i->main_field);
+	//items.insert(items.end(), i);
 }
 
 void Level::advance_frame(ICameraSceneNode *cam) {
@@ -102,7 +370,6 @@ void Level::advance_frame(ICameraSceneNode *cam) {
 	}
 
 	//handling player velocity changes and animation
-	player->animator->check();
 	if (player->main_field->velocity.position_x == 0)
 	{
 		if (player->animator->getAnimation() != 0)
@@ -165,18 +432,18 @@ bool Level::collision_detect(Field* source) {
 
 		//Collision is detected corner wise, checking if any of the 4 corners is inside of other object
 		//Checking target inside source (vertical collision)
-		if (sx1 < tx1 && tx1 < sx2)
+		if (sx1 <= tx1 && tx1 <= sx2)
 		{
-			if (sy1 < ty1 && ty1 < sy2)
+			if (sy1 <= ty1 && ty1 <= sy2)
 				collided = true;
-			if (sy1 < ty2 && ty2 < sy2)
+			if (sy1 <= ty2 && ty2 <= sy2)
 				collided = true;
 		}
-		if (sx1 < tx2 && tx2 < sx2)
+		if (sx1 <= tx2 && tx2 <= sx2)
 		{
-			if (sy1 < ty1 && ty1 < sy2)
+			if (sy1 <= ty1 && ty1 <= sy2)
 				collided = true;
-			if (sy1 < ty2 && ty2 < sy2)
+			if (sy1 <= ty2 && ty2 <= sy2)
 				collided = true;
 		}
 		//Checking source inside target (horizontal collision)
@@ -361,4 +628,55 @@ void Level::process_key(irr::EKEY_CODE keycode) {
 		if (collision_detect(player->main_field))
 			player->main_field->position.layer += 1;
 	}
+}
+
+inline std::string Level::getNextRelevantLine(ifstream& infile) {
+	std::string ans = "";
+	getline(infile, ans);
+	//Skipping non-relevant lines
+	while (ans.empty() || ans[0] == '#') //empty spacing line or comment
+		getline(infile, ans);
+	return ans;
+}
+
+void Level::extractValues(std::string source, double* output) {
+	int n = 0;
+	int i = 0;
+	bool negative = false;
+	double ans = 0.0;
+	int decimal = 0;
+	while (i < source.length())
+	{
+		if (source[i] == '-')
+			negative = true;
+		else
+			if (source[i] == '.')
+				decimal = 10;
+			else
+				if (source[i] != ' ')
+				{
+					if (decimal == 0)
+						ans = ans*10 + source[i] - 48; //non-decimal
+					else
+					{
+						//decimal
+						ans += (source[i] - 48)/decimal;
+						decimal *= 10;
+					}
+				}
+				else
+				{
+					//Negative/positive and reset
+					if (!negative)
+						output[n++] = ans;
+					else output[n++] = -ans;
+					negative = false;
+					ans = 0.0;
+				}
+		i++;
+	}
+	//Adding last value
+	if (!negative)
+		output[n++] = ans;
+	else output[n++] = -ans;
 }

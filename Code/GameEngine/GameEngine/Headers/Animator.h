@@ -1,6 +1,7 @@
 #ifndef __Animator_h__
 #define __Animator_h__
 
+#include "AnimationTable.h"
 #include <iostream>
 #include <ctime>
 #include <cstdlib>
@@ -23,21 +24,22 @@ class Field;
 class Animator
 {
 	public:
-		Animator(std::string Path, scene::IAnimatedMeshSceneNode* Model);
+		Animator(AnimationTable* Table, scene::IAnimatedMeshSceneNode* Model);
 
 		void check();
+		double checkProgress();
 		int getAnimation();
 		void setAnimation(int As);
 		void setSpeed(int As);
 		void stop();
 		void resume();
+		void set(bool ac, bool lo, int aid, int as, int curf, int minf, int maxf);
 	private:
 		bool active;
 		bool looping;
 		int animID;
 		int animSpeed;
-		int minFrame;
-		int maxFrame;
+		AnimationTable* animTable;
 		scene::IAnimatedMeshSceneNode* graphic_model;
 };
 

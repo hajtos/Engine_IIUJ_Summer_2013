@@ -11,20 +11,26 @@ Monster::~Monster() {
 	main_field = 0;
 }
 
-Monster::Monster(std::string init, Level* L, Point position, Point size) {
-	movement_speed = 10;
-	hp = 100;
+Monster::Monster(Level* L, int ms, int mhp, std::string nm, std::string mt, //movement speed, hit points, name, monster type
+			Point pos, Point size, int ca1, int ca2, int ca3, int gd, int fa, //position, size, custom attributes, gravity degree, facing angle
+			char* animT, char* modelP, Point trans, bool anim, //animation table, model path, translation, animated?
+			int lt, bool a, bool aa) { //life time, active, always active
+	movement_speed = ms;
+	hp = mhp;
 	std::list<Behaviour> temp_B;
 	aI = temp_B;
-	name = "Monster"; //where will this be derived from?
-	monster_type = init; //where will this be derived from?
+	name = nm; //where will this be derived from?
+	monster_type = mt; //where will this be derived from?
 	
-	custom_attribute1 = 0;
-	custom_attribute2 = 0;
-	custom_attribute3 = 0;
-	gravity_degree = 100;
-	facing_angle = 90;
-	main_field = new Field(this, position, size, 2, "", L);
+	custom_attribute1 = ca1;
+	custom_attribute2 = ca2;
+	custom_attribute3 = ca3;
+	gravity_degree = gd;
+	facing_angle = fa;
+	main_field = new Field(this, pos, size, 2, modelP, L, lt, trans, anim, a, aa);
+	if (anim)
+		animator = new Animator(L->animation_tables.find(animT)->second, main_field->graphic_model_animated);
+	else animator = 0;
 }
 
 unsigned int Monster::get_type() {

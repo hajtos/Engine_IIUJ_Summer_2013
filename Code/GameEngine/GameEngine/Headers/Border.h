@@ -17,13 +17,14 @@ class Border : public Entity
 		bool absolute;
 
 		~Border();
-		Border(Point position, Point size, Level* L);
+		Border(Level* L, double ms, bool abs, int b, Point pos, Point size,
+			int ca1, int ca2, int ca3, int gd, int fa, int mt, char* animT,
+			char* modelP, Point trans, bool anim, int lt, bool a, bool aa);
 
 		unsigned int get_type();
 		void remove();
 	private:
 		int bouncing;
-
 };
 
 #endif

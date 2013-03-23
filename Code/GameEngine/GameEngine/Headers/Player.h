@@ -16,14 +16,15 @@ class Player;
 class Player : public Entity
 {
 	public:
-		Animator* animator;
 		int hp;
 		int lifes;
 		bool grounded;
 		
 		~Player();
 		Player();
-		Player(Level* L);
+		Player(Level* L, int ms, int php, int l, Point pos, Point size,
+			int ca1, int ca2, int ca3, int gd, int fa, char* animT, char* modelP,
+			Point trans, bool anim);
 		unsigned int get_type();
 		void remove();
 };

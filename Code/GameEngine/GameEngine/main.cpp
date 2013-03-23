@@ -61,9 +61,9 @@ int main()
 	//ICameraSceneNode *cam = smgr->addCameraSceneNode(0, vector3df(0,30,0), vector3df(0,0,0));
 	ICameraSceneNode *cam = smgr->addCameraSceneNode(0, vector3df(0,15,-40), vector3df(0,0,0));
 
-	///Creating level (temporary test)
-	Level L = Level(device);
-	
+	///Creating level (From file, yay!)
+	Level L = Level(device, "../Init/level1.ini");
+
 
 	Background tlo_niebo;
 	tlo_niebo = Background(vector3df(500,350,0), vector3df(1,1,1000), false, "../media/environment/sky16.JPG", 0.1, 1.0, device, L);
@@ -85,12 +85,12 @@ int main()
 		{
 			u32 t1 = device->getTimer()->getTime();
 			f32 frameDeltaTime = (f32)(t1 - t2) / 1000.f; // Time in seconds
-			if (frameDeltaTime >= FrameInterval)
+			if (FrameInterval <= frameDeltaTime)
 			{
 				//Updating Time
 				t2 = t1;
 				driver->beginScene(true, true, SColor(255,100,101,140));
-				L.delta_time = (frameDeltaTime < 0.05) ? frameDeltaTime : 0.05; //min, deltaTime or 3 frames
+				L.delta_time = (frameDeltaTime < 3*FrameInterval) ? frameDeltaTime : 3*FrameInterval; //min, deltaTime or 3 frames
 				
 				//Handling Keys
 				if(receiver.IsKeyDown(irr::KEY_KEY_W))

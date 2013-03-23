@@ -1,9 +1,8 @@
-using namespace std;
-
 #include "Animator.h"
 
-Animator::Animator(std::string Path, scene::IAnimatedMeshSceneNode* Model)
+Animator::Animator(AnimationTable* Table, scene::IAnimatedMeshSceneNode* Model)
 {
+	animTable = Table;
 	graphic_model = Model;
 	animSpeed = 15;
 	active = true;
@@ -14,16 +13,19 @@ void Animator::check()
 {
 	if (!active)
 		return;
-	if (graphic_model->getFrameNr() > graphic_model->getEndFrame() - 1)
+	if (graphic_model->getEndFrame()-1 < graphic_model->getFrameNr())
 	{
 		if (looping)
 			setAnimation(animID);
 		else
-		{
-			active = false;
-			animSpeed = 0;
-		}
+			stop();
 	}
+}
+
+double Animator::checkProgress() {
+	double current = graphic_model->getFrameNr() - graphic_model->getStartFrame();
+	current /= graphic_model->getEndFrame() - graphic_model->getStartFrame();
+	return current;
 }
 
 int Animator::getAnimation()
@@ -33,61 +35,64 @@ int Animator::getAnimation()
 
 void Animator::setAnimation(int As)
 {
-	srand((unsigned)time(0));
-	int random = rand()%3;
-	switch (As)
+	active = true;
+	//If no change is needed, skip the rest
+	if ((animID == As) && (animTable->size[As] < 2))
+		return;
+	animID = As;
+	//Check if the animation is looping
+	looping = false;
+	if (As == 0)
+		looping = true;
+	if (As == 1)
+		looping = true;
+	if (As == 2)
+		looping = true;
+	
+	//Set the new cycle
+	int minFrame = graphic_model->getFrameNr();
+	int maxFrame = graphic_model->getFrameNr();
+	if ((0 < animTable->size[As]) && looping)
 	{
-	//Idle
-	case 0:
-		animID = 0;
-		looping = true;
-		if (random == 0)
-		{
-			minFrame = 183;
-			maxFrame = 204;
-		}
-		if (random == 1)
-		{
-			minFrame = 205;
-			maxFrame = 249;
-		}
-		if (random == 2)
-		{
-			minFrame = 250;
-			maxFrame = 299;
-		}
-		break;
-	//Walk
-	case 1:
-		animID = 1;
-		looping = true;
-		minFrame = 0;
-		maxFrame = 13;
-		break;
-	default:
-		break;
+		int random = rand()%(animTable->size[As]);
+
+		minFrame = animTable->animation[As][random*2];
+		maxFrame = animTable->animation[As][random*2+1];
 	}
 	graphic_model->setFrameLoop(minFrame, maxFrame);
+	graphic_model->setCurrentFrame(minFrame);
 	graphic_model->setAnimationSpeed(animSpeed);
 }
 
 void Animator::setSpeed(int As)
 {
 	animSpeed = As;
+	graphic_model->setAnimationSpeed(animSpeed);
 }
 
 void Animator::stop()
 {
-	if (graphic_model == 0)
-		return;
 	graphic_model->setAnimationSpeed(0);
 	active = false;
 }
 
 void Animator::resume()
 {
-	if (graphic_model == 0)
-		return;
 	graphic_model->setAnimationSpeed(animSpeed);
 	active = true;
+}
+
+void Animator::set(bool ac, bool lo, int aid, int as, int curf, int minf, int maxf)
+{
+	active = ac;
+	looping = lo;
+	animID = aid;
+	animSpeed = as;
+	
+	if (!active)
+		graphic_model->setAnimationSpeed(0);
+	else
+		graphic_model->setAnimationSpeed(animSpeed);
+	graphic_model->setFrameLoop(minf, maxf);
+	graphic_model->setCurrentFrame(curf);
 }

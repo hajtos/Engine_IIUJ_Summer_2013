@@ -33,13 +33,13 @@ class Field
 		char movement_type;
 		Point position;
 		int time_left;
-		bool fixed;
 		Level* location;
 		scene::ISceneNode* graphic_model;
 		scene::IAnimatedMeshSceneNode* graphic_model_animated;
 		
 		~Field();
-		Field(Entity* O, Point P, Point S, int model_type, std::string Path, Level* L, int lifetime = -1);
+		Field(Entity* O, Point P, Point S, int model_type, char* Path, Level* L,
+			int lifetime, Point trans, bool anim, bool a, bool aa);
 		void rescale(Point to_size);
 		void update();
 	private:
@@ -50,6 +50,8 @@ class Field
 		Point movement_point;
 		Event* destroy_event;
 		bool destroy_at_stop;
+		bool active;
+		bool always_active;
 
 		void move_line(Point speed, int time);
 		void move_circle(Point speed, Point center, int time);

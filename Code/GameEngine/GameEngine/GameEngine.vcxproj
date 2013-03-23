@@ -67,6 +67,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Sources\AnimationTable.cpp" />
     <ClCompile Include="Sources\Animator.cpp" />
     <ClCompile Include="Sources\Background.cpp" />
     <ClCompile Include="Sources\Behaviour.cpp" />
@@ -91,6 +92,7 @@
     <ClCompile Include="Sources\Point.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Headers\AnimationTable.h" />
     <ClInclude Include="Headers\Animator.h" />
     <ClInclude Include="Headers\Background.h" />
     <ClInclude Include="Headers\Behaviour.h" />
