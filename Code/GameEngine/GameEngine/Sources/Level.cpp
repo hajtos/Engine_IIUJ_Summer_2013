@@ -370,7 +370,7 @@ void Level::advance_frame(ICameraSceneNode *cam) {
 	}
 
 	//handling player velocity changes and animation
-	if (player->main_field->velocity.position_x == 0)
+	if (!player->main_field->velocity->finished())
 	{
 		if (player->animator->getAnimation() != 0)
 			player->animator->setAnimation(0);
@@ -383,12 +383,12 @@ void Level::advance_frame(ICameraSceneNode *cam) {
 
 	//Handling player grounding
 	player->main_field->position.position_y -= 1.0;
-	if (collision_detect(player->main_field))
-		player->grounded = true;
-	else player->grounded = false;
+	//if (collision_detect(player->main_field))
+	//	player->grounded = true;
+	//else player->grounded = false;
 	player->main_field->position.position_y += 1.0;
-	if (player->grounded)
-		player->main_field->velocity.position_x = 0;
+	//if (player->grounded)
+	//	player->main_field->velocity.position_x = 0;
 	//player->main_field->velocity.position_y = 0; //player->main_field->get_vy()
 
 	//decrementing layer change delay
@@ -396,11 +396,31 @@ void Level::advance_frame(ICameraSceneNode *cam) {
 		lc_interval--;
 }
 
-bool Level::collision_detect(Field* source) {
+void Level::collision_detect() {
 	std::list<Field*>::iterator target = fields.begin();
-	bool p = false;
 	while (target != fields.end())
 	{
+		std::list<Field*>::iterator finding = target;
+		++finding;
+		Point nextPos1 = (*target)->velocity->nextPos(&(*target)->position);
+		Point nextPos2 = (*finding)->velocity->nextPos(&(*finding)->position);
+		Point edge = (*target)->shape->edge()+nextPos1;
+		while (edge.layer > nextPos2.layer || edge.position_x > nextPos2.position_x) {
+			if ((*target)->shape->collidesWith((*finding)->shape,nextPos2-nextPos1)) {
+				if ((*finding)->collision_effect && (*target)->owner && (*target)->owner->get_type()&(*finding)->type) {
+					if ((*finding)->collision_effect->blocking) {
+						do {
+							(*target)->velocity->flatten(Point(0,0,1));
+							nextPos1 = (*target)->velocity->nextPos(&(*target)->position);
+						} while ((*target)->shape->collidesWith((*finding)->shape,nextPos2-nextPos1));
+					}
+					(*finding)->collision_effect->invokeEvent(*finding,*target);
+
+				}
+			}
+			++finding;
+		}
+		/*
 		//Checking for redundant comparisons (different z levels, source-source)
 		if (source->position.layer < ((*target)->position.layer - (*target)->size.layer / 2))
 		{
@@ -477,49 +497,12 @@ bool Level::collision_detect(Field* source) {
 			}
 			p = true;
 		}
-		++target;
+		++target;*/
 	}
-	return p;
 }
 
 void Level::move_field(Field* field) {
-	Point base = field->position;
-	switch (field->movement_type) {
-	case -1: {
-		break;
-			 }
-	case 'u':{
-		field->position.position_x += field->velocity.position_x * field->owner->movement_speed * delta_time;
-		if (collision_detect(field))
-		{
-			field->position.position_x = base.position_x;
-			field->velocity.position_x = 0;
-		}
-		field->position.position_y += field->velocity.position_y * field->owner->movement_speed * delta_time;
-		if (collision_detect(field))
-		{
-			field->position.position_y = base.position_y;
-			field->velocity.position_y = 0;
-		}
-		break;
-			}
-	}
-	--field->time_left;
-}
-
-void Level::demove_field(Field* field) {
-	Point t = field->position;
-	switch (field->movement_type) {
-	case -1: {
-		break;
-			 }
-	case 'u':{
-		t= t-field->velocity*field->owner->movement_speed*delta_time;	
-		break;
-			}
-	}
-	field->position = t;
-	field->time_left = 0;
+	field->position = field->velocity->nextPos(&field->position);
 }
 
 void Level::remove_player(Field* field) {
@@ -584,7 +567,7 @@ void Level::process_key(irr::EKEY_CODE keycode) {
 		return;
 	if (keycode == irr::KEY_KEY_W)
 		if (player->grounded)
-			player->main_field->velocity.position_y = player->movement_speed*2;
+			player->main_field->velocity = new StraightVelocity(0,player->movement_speed*2,0,-1);
 	/*
 	if (keycode == irr::KEY_KEY_S)
 		if (player->grounded)
@@ -595,7 +578,7 @@ void Level::process_key(irr::EKEY_CODE keycode) {
 		if (player->grounded)
 		{
 			player->facing_angle = 90;
-			player->main_field->velocity.position_x = player->movement_speed;
+			player->main_field->velocity = new StraightVelocity(player->movement_speed,0,0,-1);
 		}
 	}
 	if (keycode == irr::KEY_KEY_A)
@@ -603,30 +586,26 @@ void Level::process_key(irr::EKEY_CODE keycode) {
 		if (player->grounded)
 		{
 			player->facing_angle = 270;
-			player->main_field->velocity.position_x = -player->movement_speed;
+			player->main_field->velocity = new StraightVelocity(-player->movement_speed,0,0,-1);
 		}
 	}
 	if (keycode == irr::KEY_KEY_Q)
 	{
-		if (!player->grounded)
+		if (!player->main_field->velocity->grounded())
 			return;
 		if (lc_interval != 0)
 			return;
 		lc_interval = 30;
-		player->main_field->position.layer += 1;
-		if (collision_detect(player->main_field))
-			player->main_field->position.layer -= 1;
+		player->main_field->velocity = new StraightVelocity(0,0,1,1);
 	}
 	if (keycode == irr::KEY_KEY_Z)
 	{
-		if (!player->grounded)
+		if (!player->main_field->velocity->grounded())
 			return;
 		if (lc_interval != 0)
 			return;
 		lc_interval = 30;
-		player->main_field->position.layer -= 1;
-		if (collision_detect(player->main_field))
-			player->main_field->position.layer += 1;
+		player->main_field->velocity = new StraightVelocity(0,0,-1,1);
 	}
 }
 

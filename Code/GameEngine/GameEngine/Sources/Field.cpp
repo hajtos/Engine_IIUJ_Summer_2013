@@ -20,14 +20,11 @@ Field::Field(Entity* O, Point P, Point S, int model_type, char* Path, //owner, p
 		bool a, bool aa) { //active, always active
 	owner = O;
 	type = O->get_type();
-	movement_type = 'u'; //unknown, I assume it's based on type?
+	velocity = new StraightVelocity(0,0,0,lifetime);
 	position = P;
-	size = S;
-	time_left = lifetime;
+	shape = new Rectangle(S);
 
 	collision_effect = 0;
-	velocity = Point();
-	movement_point = Point();
 	destroy_event = 0;
 	destroy_at_stop = false;
 	location = L;
@@ -119,23 +116,17 @@ void Field::update() {
 
 	//Handling gravity
 	if (this->owner)
-		velocity.position_y -= location->gravity*location->delta_time*this->owner->gravity_degree/100;
+		velocity->applyGravity(owner->gravity_degree/100);
 
 	//Handling life time
-	if (time_left == 0)
+	if (velocity->finished() == 0)
 		if (destroy_at_stop)
 			location->trash(this);
-		else time_left--;
 		//owner->remove();
-	if (time_left > 0)
-		time_left--;
+	velocity->reduceTime();
 }
 
-void Field::move_line(Point speed, int time) {
-	throw "Not yet implemented";
-}
-
-void Field::move_circle(Point speed, Point center, int time) {
-	throw "Not yet implemented";
+void Field::move(Velocity* v) {
+	velocity = v;
 }
 

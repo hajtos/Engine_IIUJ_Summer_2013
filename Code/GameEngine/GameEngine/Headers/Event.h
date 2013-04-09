@@ -14,6 +14,7 @@ class Event;
 class Event
 {
 	public:
+		bool blocking;
 		virtual void invokeEvent(Field* source, Field* target) = 0;
 	private:
 		int custom_attribute1;

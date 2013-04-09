@@ -70,9 +70,8 @@ class Level
 		void add_monster(std::string init, Point position = Point(), Point size = Point(5.0, 10.0, 1.0));
 		void add_item(std::string init, Point position = Point(), Point size = Point(5.0, 5.0, 1.0));
 		void advance_frame(ICameraSceneNode *cam);
-		bool collision_detect(Field* source);
+		void collision_detect();
 		void move_field(Field* field);
-		void demove_field(Field* field);
 		void remove_player(Field* field);
 		void remove_border(Field* field, Border* entity);
 		void remove_monster(Field* field, Monster* entity);

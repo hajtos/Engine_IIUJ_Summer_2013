@@ -8,6 +8,10 @@
 #include <string>
 #include <exception>
 #include <irrlicht.h>
+#include "Velocity.h"
+#include "Shape.h"
+#include "Rectangle.h"
+#include "StraightVelocity.h"
 
 using namespace std;
 
@@ -30,9 +34,7 @@ class Field
 	public:
 		Entity* owner;
 		unsigned int type;
-		char movement_type;
 		Point position;
-		int time_left;
 		Level* location;
 		scene::ISceneNode* graphic_model;
 		scene::IAnimatedMeshSceneNode* graphic_model_animated;
@@ -42,19 +44,17 @@ class Field
 			int lifetime, Point trans, bool anim, bool a, bool aa);
 		void rescale(Point to_size);
 		void update();
+		Velocity* velocity;
 	private:
 		Event* collision_effect;
-		Point size;
+		Shape* shape;
 		Point translation;
-		Point velocity;
-		Point movement_point;
 		Event* destroy_event;
 		bool destroy_at_stop;
 		bool active;
 		bool always_active;
 
-		void move_line(Point speed, int time);
-		void move_circle(Point speed, Point center, int time);
+		void move(Velocity* v);
 
 	friend class Level;
 };
